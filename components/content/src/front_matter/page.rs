@@ -141,6 +141,15 @@ impl PageFrontMatter {
     pub fn weight(&self) -> usize {
         self.weight.unwrap()
     }
+
+    /// Returns true if the page's `date` is in the future.
+    /// Such pages should be treated like drafts and excluded from the build.
+    pub fn is_scheduled(&self) -> bool {
+        match self.datetime {
+            Some(dt) => dt > OffsetDateTime::now_utc(),
+            None => false,
+        }
+    }
 }
 
 impl Default for PageFrontMatter {
