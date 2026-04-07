@@ -45,7 +45,6 @@ pub fn clean_and_truncate_body(truncate_content_length: Option<usize>, body: &st
 /// A single page or section that should be included in the search index
 /// for a specific language.
 struct IndexItem<'a> {
-    url: &'a str,
     title: &'a Option<String>,
     description: &'a Option<String>,
     content: &'a String,
@@ -67,7 +66,6 @@ fn collect_index_items<'a>(lang: &str, library: &'a Library) -> Vec<IndexItem<'a
 
         if section.meta.redirect_to.is_none() {
             items.push(IndexItem {
-                url: &section.permalink,
                 title: &section.meta.title,
                 datetime: &None,
                 description: &section.meta.description,
@@ -80,7 +78,6 @@ fn collect_index_items<'a>(lang: &str, library: &'a Library) -> Vec<IndexItem<'a
             let page = &library.pages[page];
             if page.meta.in_search_index {
                 items.push(IndexItem {
-                    url: &page.permalink,
                     title: &page.meta.title,
                     datetime: &page.meta.datetime,
                     description: &page.meta.description,

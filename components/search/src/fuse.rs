@@ -21,8 +21,11 @@ pub fn build_index(lang: &str, library: &Library, config: &Search) -> Result<Str
     let mut index: Vec<FuseIndexItem> = Vec::new();
     let items = collect_index_items(lang, library);
     for item in &items {
+        // Use the relative path as the document reference rather than the full
+        // permalink: the base URL is the same for every entry, so storing just
+        // the path noticeably shrinks the generated index.
         index.push(FuseIndexItem {
-            url: item.url,
+            url: item.path,
             title: match config.include_title {
                 true => Some(item.title.as_deref().unwrap_or_default()),
                 false => None,
