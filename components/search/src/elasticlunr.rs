@@ -86,7 +86,10 @@ pub fn build_index(lang: &str, library: &Library, config: &Config) -> Result<Str
     let items = collect_index_items(lang, library);
 
     for item in items {
-        index.add_doc(item.url, fill_index(&config.search, item));
+        // Use the relative path as the document reference rather than the full
+        // permalink: the base URL is the same for every entry, so storing just
+        // the path noticeably shrinks the generated index.
+        index.add_doc(item.path, fill_index(&config.search, item));
     }
 
     Ok(index.to_json())
@@ -128,7 +131,6 @@ mod tests {
         let content = "Some content".to_string();
 
         let item = crate::IndexItem {
-            url: "http://example.com",
             title: &title,
             description: &description,
             datetime: &None,
@@ -152,7 +154,6 @@ mod tests {
         let content = "Some content".to_string();
 
         let item = crate::IndexItem {
-            url: "http://example.com",
             title: &title,
             description: &description,
             datetime: &None,
@@ -177,7 +178,6 @@ mod tests {
         let content = "Some content".to_string();
 
         let item = crate::IndexItem {
-            url: "http://example.com",
             title: &title,
             description: &description,
             datetime: &None,
@@ -202,7 +202,6 @@ mod tests {
         let datetime = Some(OffsetDateTime::parse("2023-01-31T00:00:00Z", &Rfc3339).unwrap());
 
         let item = crate::IndexItem {
-            url: "http://example.com",
             title: &title,
             description: &description,
             datetime: &datetime,
