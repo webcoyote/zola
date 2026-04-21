@@ -288,6 +288,12 @@ impl Site {
                 continue;
             }
 
+            // Skip pages whose date is still in the future, unless
+            // we're explicitly including drafts (e.g. preview builds).
+            if page.meta.is_scheduled() && !self.include_drafts {
+                continue;
+            }
+
             // We are only checking it on load and not in add_page since we have access to
             // all the components there.
             if page.file.filename == "index.md" {
